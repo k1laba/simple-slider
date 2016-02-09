@@ -1,0 +1,34 @@
+/* Styles go here */
+
+.simple-slider .left-arrow {
+  float: left;
+  top: 45%;
+  display: block;
+  position: absolute;
+  left: 10px;
+  background: url('http://aj-mjinvestments.com/modules/mod_hot_slicebox/images/arrow_left.png') no-repeat;
+  background-repeat: no-repeat;
+  width: 42px;
+  height: 42px;
+  z-index: 10;
+}
+.simple-slider .right-arrow {
+  float: right;
+  top: 45%;
+  display: block;
+  position: absolute;
+  right: 10px;
+  background: url('http://aj-mjinvestments.com/modules/mod_hot_slicebox/images/arrow_right.png') no-repeat;
+  width: 42px;
+  height: 42px;
+  z-index: 10;
+}
+.simple-slider ul.slider-container {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.simple-slider ul.slider-container li {
+  position: absolute;
+  display: block;
+}
