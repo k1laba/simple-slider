@@ -3,7 +3,7 @@ function Slider(elementId, options) {
   var defaults = {
     width: '550px',
     height: '350px',
-    replay: true,
+    replay: false,
     duration: 3000
   }
   if (options) {
@@ -19,6 +19,10 @@ function Slider(elementId, options) {
   parent.style.width = defaults.width;
   parent.style.height = defaults.height;
   
+  var prevButton = document.createElement('span');
+  if (!defaults.replay) { prevButton.style.opacity = 0.3; }
+  var nextButton = document.createElement('span');
+  
   var container = parent.children[0];
   var index = 0;
   var count = container.children.length;
@@ -31,8 +35,9 @@ function Slider(elementId, options) {
   nextElement.style.opacity = 0;
   nextElement.style.zIndex = 0;
   var animationTimer;
-  
   function show() {
+  	prevButton.style.opacity = index == 0 && !defaults.replay ? 0.3 : 1;
+    nextButton.style.opacity = index == count - 1 && !defaults.replay ? 0.3 : 1;
     for(var i=0; i< count; i++) {
       if (container.children[i] === currentElement) { continue; }
       if (container.children[i] === nextElement) { continue; }
@@ -76,8 +81,6 @@ function Slider(elementId, options) {
      show();
   }
   function setupNavigation() {
-    var prevButton = document.createElement('span');
-    var nextButton = document.createElement('span');
     prevButton.className = "left-arrow";
     nextButton.className = "right-arrow";
     parent.appendChild(prevButton);
