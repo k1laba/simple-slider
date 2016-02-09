@@ -3,7 +3,7 @@ function Slider(elementId, options) {
   var defaults = {
     width: '550px',
     height: '350px',
-    replay: false,
+    replay: true,
     duration: 3000
   }
   if (options) {
