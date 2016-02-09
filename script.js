@@ -1,5 +1,4 @@
-// Code goes here
-
+'use strict'
 function Slider(elementId, options) {
   var defaults = {
     width: '550px',
@@ -25,12 +24,32 @@ function Slider(elementId, options) {
   var count = container.children.length;
   if (count < 2) { return; }
   
+  var currentElement = container.children[index];
+  var nextElement = container.children[index + 1];
+  currentElement.style.opacity = 1;
+  currentElement.style.zIndex = 1;
+  nextElement.style.opacity = 0;
+  nextElement.style.zIndex = 0;
+  var animationTimer;
+  
   function show() {
     for(var i=0; i< count; i++) {
-      container.children[i].style.opacity = (i === index ? '1' : '0');
-      container.children[i].style.zIndex = (i === index ? '2' : '1');
+      if (container.children[i] === currentElement) { continue; }
+      if (container.children[i] === nextElement) { continue; }
+      container.children[i].style.opacity = 0;
+      container.children[i].style.zIndex = 0;
     }
-    setupTimer();
+    nextElement.style.zIndex = 1;
+    currentElement.style.zIndex = 0;
+    animationTimer = setInterval(function() {
+      nextElement.style.opacity = parseFloat(nextElement.style.opacity) + 0.2;
+      currentElement.style.opacity = parseFloat(currentElement.style.opacity) - 0.2;
+      if (nextElement.style.opacity == 1) { 
+        clearInterval(animationTimer);
+        animationTimer = false;
+        setupTimer();
+      }
+    }, 100);
   }
   var timer;
   function setupTimer() {
@@ -39,23 +58,23 @@ function Slider(elementId, options) {
        next();
     }, defaults.duration);
   }
-  
   function next() {
+    if (animationTimer) {return; }
+    currentElement = container.children[index];
     if (index == count - 1 && !defaults.replay) { clearTimeout(timer); return; }
       index++;
-      if (index == count) { 
-        index = 0; 
-      }
+      if (index == count) { index = 0; }
+      nextElement = container.children[index];
       show();
   }
   function prev() {
+    if (animationTimer) {return; }
+     currentElement = container.children[index];
      index--;
-     if (index < 0) { 
-       index = !defaults.replay ? 0 : count - 1;
-     }
+     if (index < 0) { index = !defaults.replay ? 0 : count - 1; }
+     nextElement = container.children[index];
      show();
   }
-  
   function setupNavigation() {
     var prevButton = document.createElement('span');
     var nextButton = document.createElement('span');
@@ -67,6 +86,6 @@ function Slider(elementId, options) {
     nextButton.addEventListener("click", function() { next(); });
   }
   setupNavigation();
-  show();
+  setupTimer();
 }
 new Slider("slider1");
