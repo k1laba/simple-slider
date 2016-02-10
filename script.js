@@ -4,7 +4,8 @@ function Slider(elementId, options) {
     width: '550px',
     height: '350px',
     replay: true,
-    duration: 3000
+    duration: 3000,
+    autoPlay: true
   }
   if (options) {
     for(var prop in options) {
@@ -34,6 +35,7 @@ function Slider(elementId, options) {
   currentElement.style.zIndex = 1;
   nextElement.style.opacity = 0;
   nextElement.style.zIndex = 0;
+  var isCurrentElemIframe = currentElement.children[0].tagName.toLowerCase() === 'iframe';
   var animationTimer;
   function show() {
   	prevButton.style.opacity = index == 0 && !defaults.replay ? 0.3 : 1;
@@ -51,8 +53,11 @@ function Slider(elementId, options) {
       currentElement.style.opacity = parseFloat(currentElement.style.opacity) - 0.2;
       if (nextElement.style.opacity == 1) { 
         clearInterval(animationTimer);
+        clearTimeout(timer);
         animationTimer = false;
-        setupTimer();
+        isCurrentElemIframe = nextElement.children[0].tagName.toLowerCase() === 'iframe';
+        if (defaults.autoPlay && !isCurrentElemIframe) { 
+        setupTimer(); }
       }
     }, 100);
   }
@@ -88,7 +93,17 @@ function Slider(elementId, options) {
     prevButton.addEventListener("click", function() { prev(); });
     nextButton.addEventListener("click", function() { next(); });
   }
+  (function() {
+  		for(var i=0; i<count; i++) {
+      	var elem = container.children[i].children[0];
+      	if (elem.tagName.toLowerCase() === 'iframe') {
+        		elem.setAttribute('width', defaults.width);
+            elem.setAttribute('height', defaults.height);
+            elem.setAttribute('src', elem.getAttribute('src').replace('watch?v=', 'embed/'));
+        }
+      }
+  })();
   setupNavigation();
-  setupTimer();
+  if (defaults.autoPlay && !isCurrentElemIframe) { setupTimer(); }
 }
 new Slider("slider1");
