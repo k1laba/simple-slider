@@ -41,13 +41,11 @@ function Slider(elementId, options) {
   	prevButton.style.opacity = index == 0 && !defaults.replay ? 0.3 : 1;
     nextButton.style.opacity = index == count - 1 && !defaults.replay ? 0.3 : 1;
     for(var i=0; i< count; i++) {
-      if (container.children[i] === currentElement) { continue; }
-      if (container.children[i] === nextElement) { continue; }
       container.children[i].style.opacity = 0;
       container.children[i].style.zIndex = 0;
     }
     nextElement.style.zIndex = 1;
-    currentElement.style.zIndex = 0;
+    currentElement.style.opacity = 1;
     animationTimer = setInterval(function() {
       nextElement.style.opacity = parseFloat(nextElement.style.opacity) + 0.2;
       currentElement.style.opacity = parseFloat(currentElement.style.opacity) - 0.2;
