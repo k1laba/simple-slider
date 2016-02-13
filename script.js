@@ -9,7 +9,7 @@ function Slider(elementId, options) {
   }
   if (options) {
     for(var prop in options) {
-       if (prop && defaults[prop]) {
+       if (defaults.hasOwnProperty(prop) && options[prop]) {
          defaults[prop] = options[prop];
        }
     }
